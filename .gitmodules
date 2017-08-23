@@ -1,0 +1,3 @@
+[submodule "corexdiscrete"]
+	path = corexdiscrete
+	url = https://github.com/brekelma/bio_corex
