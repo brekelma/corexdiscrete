@@ -1,21 +1,39 @@
 {
   "id": "76a565ac5d16a1ce0f16114d8edd1558bcf844fce95240a17072e242af74ffa3",
-  "name": "dsbox.linearcorex",
-  "common_name": "DSBox Linear CorEx",
+  "name": "dsbox.corexdiscrete.corexdiscrete.corex",
+  "common_name": "DSBox Corex Discrete",
   "description": "Return components/latent factors that explain the most multivariate mutual information in the data. For comparison, PCA returns components explaining the most variance in the data.",
   "languages": [
     "python2.7"
   ],
   "library": "dsbox",
-  "version": "0.5",
-  "source_code": "https://github.com/gregversteeg/LinearCorex.git",
+  "version": "1.0",
+  "source_code": "https://github.com/brekelma/corexdiscrete.git",
   "is_class": true,
   "attributes": [
     {
-      "shape": "n_hidden, n_features",
+      "shape": "n_hidden, n_samples",
       "type": "array",
-      "name": "ws",
-      "description": "Weight matrix for constructing latent factors (after preprocessing). "
+      "name": "labels",
+      "description": "Label (i.e. highest probability value) of each hidden unit for each sample.  Note, hidden units are binary by default, so label in {0,1}."
+    }, 
+    {
+      "shape": "n_hidden, n_samples, dim_hidden",
+      "type": "array",
+      "name": "p_y_given_x",
+      "description": "The distribution of hidden unit activations for each sample."
+    },
+    {
+      "shape": "n_features",
+      "type": "array",
+      "name": "clusters",
+      "description": "Cluster label for each input variable."
+    },
+    {
+      "shape": "n_features, n_hidden",
+      "type": "array",
+      "name": "alpha",
+      "description": "Adjacency matrix between input variables and hidden units (values in [0,1], defining structure of the model)."
     }
   ],
   "parameters": [
@@ -23,6 +41,12 @@
       "type": "int",
       "name": "n_hidden",
       "description": "Number of components or latent factors to use.",
+      "is_hyperparameter": true
+    },
+     {
+      "type": "int",
+      "name": "dim_hidden",
+      "description": "Each hidden unit can take dim_hidden discrete values.",
       "is_hyperparameter": true
     },
     {
@@ -53,7 +77,7 @@
   "methods_available": [
     {
       "name": "fit",
-      "id": "dsbox.linearcorex.Corex.fit",
+      "id": "dsbox.corexdiscrete.corexdiscrete.corex.CorexDiscrete.fit",
       "description": "'Fit the model according to the given training data.\n",
       "returns": {
         "type": "object",
@@ -72,13 +96,33 @@
     },
     {
       "name": "transform",
-      "id": "dsbox.linearcorex.Corex.transform",
+      "id": "dsbox.corexdiscrete.corexdiscrete.corex.CorexDiscrete.transform",
       "description": "'Transform data according to learned model.\n",
       "returns": {
         "type": "array-like",
         "shape": "n_hidden, n_features",
         "name": "Y",
         "description": "Returns latent factors/components for each sample. '"
+      },
+      "parameters": [
+        {
+          "shape": "n_samples, n_features",
+          "type": "array-like, sparse matrix",
+          "name": "X",
+          "description": "Training vector, where n_samples is the number of samples and n_features is the number of features. ",
+          "is_hyperparameter": false
+        }
+        ]
+      }, 
+      {
+      "name": "fit_transform",
+      "id": "dsbox.corexdiscrete.corexdiscrete.corex.CorexDiscrete.fit_transform",
+      "description": "'Fit model to given training data and transform data according to learned model.\n",
+      "returns": {
+        "type": "array-like",
+        "shape": "n_hidden, n_features",
+        "name": "Y",
+        "description": "Returns latent factors/components for each sample."
       },
       "parameters": [
         {
@@ -113,7 +157,7 @@
   "schema_version": 1.0,
   "build": [{
     "type": "pip",
-    "package": "linearcorex"
+    "package": "dsbox-corexdiscrete"
   }],
   "compute_resources": {
     "sample_size": [100, 100000],
