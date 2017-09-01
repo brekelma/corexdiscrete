@@ -6,11 +6,9 @@ try:
 except IOError:
     long_description = ""
 
-print 'packages: ', find_packages()
-
 setup(
     name="corexdiscrete",
-    version="0.1.2",
+    version="0.1.4",
     description="Corex finds latent factors that explain the most correlation in discrete data.",
     license="MIT",
     author="Rob Brekelmans/Greg Ver Steeg",
