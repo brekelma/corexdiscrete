@@ -2,7 +2,7 @@ from sklearn import preprocessing
 #import primitive
 import sys
 #sys.path.append('bio_corex/')
-import bio_corex.corex as corex_disc
+import corexdiscrete.corex as corex_disc
 #import bio_corex.corex as corex_disc
 from collections import defaultdict
 from scipy import sparse
