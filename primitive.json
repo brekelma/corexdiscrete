@@ -1,5 +1,5 @@
 {
-  "id": "ae8ee36c-0bd2-3976-9bd3-edc3bbc67433",
+  "id": "01e8cb2d-5796-3fe9-9c16-d86a397e5268",
   "name": "dsbox.corexdiscrete.corex_discrete.corexdiscrete",
   "common_name": "DSBox Corex Discrete",
   "description": "Return components/latent factors that explain the most multivariate mutual information in the data. For comparison, PCA returns components explaining the most variance in the data.",
@@ -7,7 +7,7 @@
     "python2.7"
   ],
   "library": "dsbox",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "source_code": "https://github.com/brekelma/corexdiscrete.git",
   "is_class": true,
   "attributes": [
