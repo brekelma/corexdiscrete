@@ -61,7 +61,7 @@ class CorexDiscrete(UnsupervisedLearningPrimitiveBase):  #(Primitive):
             return
         if not self.training_inputs:
             raise ValueError("Missing training data.")
-            
+
         self.fit_transform(self.training_inputs)
         self.fitted = True
         return self
@@ -97,7 +97,7 @@ class CorexDiscrete(UnsupervisedLearningPrimitiveBase):  #(Primitive):
             self.n_hidden = int(self.latent_pct*len(self.columns))
 
         if self.model is None and self.latent_pct:
-           corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden,
+            corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden,
                 max_iter = self.max_iter, n_repeat = self.n_repeat, max_samples = self.max_samples,
                 n_cpu = self.n_cpu, smooth_marginals= self.smooth_marginals, missing_values = self.missing_values, 
                 verbose = self.verbose, seed = self.seed, **self.kwargs)
