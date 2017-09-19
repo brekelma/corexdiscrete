@@ -25,7 +25,7 @@ class CorexDiscrete(UnsupervisedLearningPrimitiveBase):  #(Primitive):
     def __init__(self, n_hidden: int = None, dim_hidden : int = 2, max_iter : int = 100, 
                 n_repeat : int = 1, max_samples : int = 10000, n_cpu : int = 1, 
                 smooth_marginals : bool = False, missing_values : float = -1, 
-                seed : int = None, verbose : bool = False, **kwargs): 
+                seed : int = None, verbose : bool = False, **kwargs) -> None: 
 
         super().__init__()
 
@@ -46,67 +46,79 @@ class CorexDiscrete(UnsupervisedLearningPrimitiveBase):  #(Primitive):
         if n_hidden:
             self.n_hidden = n_hidden
             self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden,
-                max_iter = max_iter, n_repeat = n_repeat, max_samples = max_samples,
-                n_cpu = n_cpu, smooth_marginals= smooth_marginals, missing_values = missing_values, 
-                verbose = verbose, seed = seed, **kwargs)
+                max_iter = self.max_iter, n_repeat = self.n_repeat, max_samples = self.max_samples,
+                n_cpu = self.n_cpu, smooth_marginals= self.smooth_marginals, missing_values = self.missing_values, 
+                verbose = self.verbose, seed = self.seed, **kwargs)
         else:
             if latent_pct is None:
                 self.latent_pct = .10 # DEFAULT = 10% of ORIGINAL FACTORS
             else:
                 self.latent_pct = latent_pct
             self.model = None
-        #n_hidden = None, latent_pct = None, dim_hidden = 2, **kwargs):
-    	
-        '''TO DO: Prune/add initialization arguments'''
-        ##super().__init__(name = 'CorexDiscrete', cls = 'corex_primitives.CorexDiscrete') # inherit from primitive?
-        #default for no columns fed?  taking all likely leads to errors
-        # self.dim_hidden = dim_hidden
-        
-        # if latent_pct is not None and n_hidden is None:
-        # 	self.n_hidden = int(len(self.columns)*latent_pct)
-        # else:
-        # 	self.n_hidden = 2 if n_hidden is None else n_hidden #DEFAULT = 2 
 
-
-
-
-        #self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden, marginal_description='discrete', **kwargs)
-
-    def fit(self, A, k, dim_hidden = 2):
-        self.fit_transform(A, k, dim_hidden)
+    def fit(self) -> None:
+        if self.fitted:
+            return
+        if not self.training_inputs:
+            raise ValueError("Missing training data.")
+            
+        self.fit_transform(self.training_inputs)
+        self.fitted = True
         return self
 
-    def predict(self, A, y = None): 
+    def produce(self, X : Sequence[Input], y : Sequence[Input] = None) -> Sequence[Output]: 
 
-        self.columns = list(A)
-        A_ = A[self.columns].values # TO DO: add error handling for X[self.columns]?
+        self.columns = list(X)
+        X_ = X[self.columns].values # TO DO: add error handling for X[self.columns]?
 
-        #if self.model is None and self.latent_pct:
-        #    self.model = corex_disc.Corex(n_hidden= int(self.latent_pct*len(self.columns)), dim_hidden = self.dim_hidden, marginal_description='discrete', **self.kwargs)
-    	
-        if self.dim_hidden == 2:
-        	factors = self.model.transform(A_, details = True)[0]
-        	factors = np.transpose(np.squeeze(factors[:,:,1])) if len(factors.shape) == 3 else factors # assuming dim_hidden = 2
-        else:
-        	factors = self.model.fit_transform(A_)
-
-        return factors
-
-    def fit_transform(self, A, k, dim_hidden = 2, y = None):
-        self.dim_hidden = dim_hidden
-        self.columns = list(A)
-     	A_ = A[self.columns].values
-
-        self.model = corex_disc.Corex(n_hidden= k, dim_hidden = self.dim_hidden, **self.kwargs)
+        if not self.fitted:
+            self.n_hidden = int(self.latent_pct*len(self.columns))
+            self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden,
+                max_iter = self.max_iter, n_repeat = self.n_repeat, max_samples = self.max_samples,
+                n_cpu = self.n_cpu, smooth_marginals= self.smooth_marginals, missing_values = self.missing_values, 
+                verbose = self.verbose, seed = self.seed, **self.kwargs)
+            self.model.fit(X_)
+            self.fitted = True
 
         if self.dim_hidden == 2:
-        	self.model.fit(A_)
-        	factors = self.model.transform(A_, details = True)[0]
-        	factors = np.transpose(np.squeeze(factors[:,:,1])) if len(factors.shape) == 3 else factors # assuming dim_hidden = 2
+            self.factors = self.model.transform(X_, details = True)[0]
+            self.factors = np.transpose(np.squeeze(self.factors[:,:,1])) if len(self.factors.shape) == 3 else self.factors # assuming dim_hidden = 2
         else:
-        	factors = self.model.fit_transform(A_)
+            self.factors = self.model.transform(X_)
 
-    	return factors
+        return self.factors
+
+    def fit_transform(self, X : Sequence[Input], y : Sequence[Input] = None) -> Sequence[Output]:
+
+        self.columns = list(X)
+        X_ = X[self.columns].values
+
+        if not self.n_hidden:
+            self.n_hidden = int(self.latent_pct*len(self.columns))
+
+        if self.model is None and self.latent_pct:
+           corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden,
+                max_iter = self.max_iter, n_repeat = self.n_repeat, max_samples = self.max_samples,
+                n_cpu = self.n_cpu, smooth_marginals= self.smooth_marginals, missing_values = self.missing_values, 
+                verbose = self.verbose, seed = self.seed, **self.kwargs)
+
+        if self.dim_hidden == 2:
+            self.model.fit(X[self.columns].values)
+            self.factors = self.model.transform(X_, details = True)[0]
+            self.factors = np.transpose(np.squeeze(factors[:,:,1])) if len(factors.shape) == 3 else factors # assuming dim_hidden = 2
+        else:
+            self.factors = self.model.fit_transform(X_)
+
+        self.fitted = True
+        
+        return self.factors
+
+    def set_training_data(self, X : Sequence[Input]) -> None:
+        self.training_inputs = X
+        self.fitted = False
+
+    def get_params(self) -> Params:
+        return Params(latent_factors = self.factors)
 
     def annotation(self):
         if self._annotation is not None:
@@ -120,4 +132,4 @@ class CorexDiscrete(UnsupervisedLearningPrimitiveBase):  #(Primitive):
         return self._annotation
 
     def get_feature_names(self):
-    	return ['CorexDisc_'+ str(i) for i in range(self.n_hidden)]
+        return ['CorexDisc_'+ str(i) for i in range(self.n_hidden)]
