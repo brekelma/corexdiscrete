@@ -9,9 +9,52 @@ from scipy import sparse
 import pandas as pd
 import numpy as np
 
-class CorexDiscrete:  #(Primitive):
+sys.path.append('../')
+from primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
+from typing import NamedTuple, Union, Optional, Sequence
 
-    def __init__(self, dim_hidden = 2, **kwargs): 
+
+Input = pd.DataFrame
+Output = np.ndarray
+Params = NamedTuple('Params', [
+    ('latent_factors', np.ndarray),  # Coordinates of cluster centers.
+])
+
+class CorexDiscrete(UnsupervisedLearningPrimitiveBase):  #(Primitive):
+
+    def __init__(self, n_hidden: int = None, dim_hidden : int = 2, max_iter : int = 100, 
+                n_repeat : int = 1, max_samples : int = 10000, n_cpu : int = 1, 
+                smooth_marginals : bool = False, missing_values : float = -1, 
+                seed : int = None, verbose : bool = False, **kwargs): 
+
+        super().__init__()
+
+        self.kwargs = kwargs
+        self.is_feature_selection = False
+        self.hyperparameters = {'n_hidden': 2} # NOT TRUE
+        self.dim_hidden = dim_hidden
+
+        self.max_iter = max_iter
+        self.n_repeat = n_repeat
+        self.max_samples = max_samples 
+        self.n_cpu = n_cpu
+        self.smooth_marginals = smooth_marginals
+        self.missing_values = missing_values
+        self.seed = seed
+        self.verbose = verbose
+
+        if n_hidden:
+            self.n_hidden = n_hidden
+            self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden,
+                max_iter = max_iter, n_repeat = n_repeat, max_samples = max_samples,
+                n_cpu = n_cpu, smooth_marginals= smooth_marginals, missing_values = missing_values, 
+                verbose = verbose, seed = seed, **kwargs)
+        else:
+            if latent_pct is None:
+                self.latent_pct = .10 # DEFAULT = 10% of ORIGINAL FACTORS
+            else:
+                self.latent_pct = latent_pct
+            self.model = None
         #n_hidden = None, latent_pct = None, dim_hidden = 2, **kwargs):
     	
         '''TO DO: Prune/add initialization arguments'''
@@ -24,21 +67,8 @@ class CorexDiscrete:  #(Primitive):
         # else:
         # 	self.n_hidden = 2 if n_hidden is None else n_hidden #DEFAULT = 2 
 
-        #if n_hidden:
-        #    self.n_hidden = n_hidden
-        #    self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden, marginal_description='discrete', **kwargs)
-        #else:
-        #    if latent_pct is None:
-        #        self.n_hidden = 2
-        #        self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden, marginal_description='discrete', **kwargs)
-        #   else:
-        #       self.kwargs = kwargs
-        #       self.model = None
 
-        self.kwargs = kwargs
-        self.is_feature_selection = False
-        self.hyperparameters = {'k': 2}#, 'dim_hidden': 2}
-        self.dim_hidden = dim_hidden
+
 
         #self.model = corex_disc.Corex(n_hidden= self.n_hidden, dim_hidden = self.dim_hidden, marginal_description='discrete', **kwargs)
 
