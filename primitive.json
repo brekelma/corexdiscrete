@@ -1,39 +1,21 @@
 {
-  "id": "01e8cb2d-5796-3fe9-9c16-d86a397e5268",
+  "id": "5bd85a5f-f8c7-37e5-a986-244c10a829cc",
   "name": "dsbox.corexdiscrete.corex_discrete.corexdiscrete",
   "common_name": "DSBox Corex Discrete",
   "description": "Return components/latent factors that explain the most multivariate mutual information in the data. For comparison, PCA returns components explaining the most variance in the data.",
   "languages": [
-    "python2.7"
+    "python2.7", "python3.5"
   ],
   "library": "dsbox",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "source_code": "https://github.com/brekelma/corexdiscrete.git",
   "is_class": true,
   "attributes": [
     {
       "shape": "n_hidden, n_samples",
       "type": "array",
-      "name": "labels",
+      "name": "latent_factors",
       "description": "Label (i.e. highest probability value) of each hidden unit for each sample.  Note, hidden units are binary by default, so label in {0,1}."
-    }, 
-    {
-      "shape": "n_hidden, n_samples, dim_hidden",
-      "type": "array",
-      "name": "p_y_given_x",
-      "description": "The distribution of hidden unit activations for each sample."
-    },
-    {
-      "shape": "n_features",
-      "type": "array",
-      "name": "clusters",
-      "description": "Cluster label for each input variable."
-    },
-    {
-      "shape": "n_features, n_hidden",
-      "type": "array",
-      "name": "alpha",
-      "description": "Adjacency matrix between input variables and hidden units (values in [0,1], defining structure of the model)."
     }
   ],
   "parameters": [
@@ -77,7 +59,7 @@
   "methods_available": [
     {
       "name": "fit",
-      "id": "dsbox.corexdiscrete.corexdiscrete.corex.CorexDiscrete.fit",
+      "id": "dsbox.corexdiscrete.corex_discrete.corexdiscrete.fit",
       "description": "'Fit the model according to the given training data.\n",
       "returns": {
         "type": "object",
@@ -88,27 +70,27 @@
         {
           "shape": "n_samples, n_features",
           "type": "array-like, sparse matrix",
-          "name": "X",
+          "name": "inputs",
           "description": "Training vector, where n_samples is the number of samples and n_features is the number of features. ",
           "is_hyperparameter": false
         }
         ]
     },
     {
-      "name": "transform",
-      "id": "dsbox.corexdiscrete.corexdiscrete.corex.CorexDiscrete.transform",
+      "name": "produce",
+      "id": "dsbox.corexdiscrete.corex_discrete.corexdiscrete.produce",
       "description": "'Transform data according to learned model.\n",
       "returns": {
         "type": "array-like",
         "shape": "n_hidden, n_features",
-        "name": "Y",
+        "name": "latent_factors",
         "description": "Returns latent factors/components for each sample. '"
       },
       "parameters": [
         {
           "shape": "n_samples, n_features",
           "type": "array-like, sparse matrix",
-          "name": "X",
+          "name": "inputs",
           "description": "Training vector, where n_samples is the number of samples and n_features is the number of features. ",
           "is_hyperparameter": false
         }
@@ -116,19 +98,19 @@
       }, 
       {
       "name": "fit_transform",
-      "id": "dsbox.corexdiscrete.corexdiscrete.corex.CorexDiscrete.fit_transform",
+      "id": "dsbox.corexdiscrete.corex_discrete.corexdiscrete.fit_transform",
       "description": "'Fit model to given training data and transform data according to learned model.\n",
       "returns": {
         "type": "array-like",
         "shape": "n_hidden, n_features",
-        "name": "Y",
+        "name": "latent_factors",
         "description": "Returns latent factors/components for each sample."
       },
       "parameters": [
         {
           "shape": "n_samples, n_features",
           "type": "array-like, sparse matrix",
-          "name": "X",
+          "name": "inputs",
           "description": "Training vector, where n_samples is the number of samples and n_features is the number of features. ",
           "is_hyperparameter": false
         }
