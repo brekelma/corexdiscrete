@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="corexdiscrete",
-    version="0.1.7",
+    version="0.1.8",
     description="Corex finds latent factors that explain the most correlation in discrete data.",
     license="MIT",
     author="Rob Brekelmans/Greg Ver Steeg",

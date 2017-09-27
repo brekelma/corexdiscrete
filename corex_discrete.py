@@ -21,8 +21,8 @@ Params = NamedTuple('Params', [
 
 class CorexDiscrete(UnsupervisedLearnerPrimitiveBase):  #(Primitive):
 
-    def __init__(self, n_hidden: int = None, dim_hidden : int = 2, latent_pct : float = None, max_iter : int = 100, 
-                n_repeat : int = 1, max_samples : int = 10000, n_cpu : int = 1, 
+    def __init__(self, n_hidden: int = None, dim_hidden : int = 2, latent_pct : float = .2, max_iter : int = 100, 
+                tol : float = 1e-5, n_repeat : int = 1, max_samples : int = 10000, n_cpu : int = 1, 
                 smooth_marginals : bool = False, missing_values : float = -1, 
                 seed : int = None, verbose : bool = False, **kwargs) -> None: 
 
@@ -30,11 +30,12 @@ class CorexDiscrete(UnsupervisedLearnerPrimitiveBase):  #(Primitive):
 
         self.kwargs = kwargs
         self.is_feature_selection = False
-        self.hyperparameters = {'n_hidden': 2} # NOT TRUE
+        self.hyperparameters = {'n_hidden': 2} # FALSE
         self.dim_hidden = dim_hidden
 
         self.max_iter = max_iter
         self.n_repeat = n_repeat
+        self.tol = tol
         self.max_samples = max_samples 
         self.n_cpu = n_cpu
         self.smooth_marginals = smooth_marginals
@@ -49,10 +50,7 @@ class CorexDiscrete(UnsupervisedLearnerPrimitiveBase):  #(Primitive):
                 n_cpu = self.n_cpu, smooth_marginals= self.smooth_marginals, missing_values = self.missing_values, 
                 verbose = self.verbose, seed = self.seed, **kwargs)
         else:
-            if latent_pct is None:
-                self.latent_pct = .10 # DEFAULT = 10% of ORIGINAL FACTORS
-            else:
-                self.latent_pct = latent_pct
+            self.latent_pct = latent_pct # default = .20% of columns
             self.model = None
             self.n_hidden = None
 
