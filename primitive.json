@@ -1,13 +1,13 @@
 {
-  "id": "fef081cf-9468-3086-9891-e54d2bca75db",
+  "id": "72d9b573-3f84-3647-8a94-020f5fee532a",
   "name": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete",
   "common_name": "DSBox Corex Discrete",
   "description": "Return components/latent factors that explain the most multivariate mutual information in the data. For comparison, PCA returns components explaining the most variance in the data.  Serves as DSBox wrapper for https://github.com/gregversteeg/bio_corex",
   "languages": [
-    "python2.7", "python3.5"
+    "python2.7", "python3.5", "python3.6"
   ],
   "library": "dsbox.corexdiscrete",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "source_code": "https://github.com/brekelma/corexdiscrete.git",
   "is_class": true,
   "attributes": [
@@ -33,13 +33,19 @@
       "type": "int",
       "name": "n_hidden",
       "description": "Number of components or latent factors to use. Default n_hidden is max(1, .2 * #columns).",
-      "is_hyperparameter": true
+      "is_hyperparameter": true,
+      "default": "10",
+      "range": [0, 1000],
+      "kind": "uniform"
     },
         {
       "type": "float",
       "name": "latent_pct",
       "description": "Instead of n_hidden, specify % of # columns as latent dimension.  Default n_hidden is max(1, .2 * #columns).",
-      "is_hyperparameter": true
+      "is_hyperparameter": true,
+      "default": ".20",
+      "range": [0,1],
+      "kind": "uniform"
     },
     {
       "type": "int",
@@ -214,5 +220,6 @@
     "mem_per_gpu": [0, 0],
     "expected_running_time": [1, 1]
   },
-  "interface_type": "dimensionality_reduction"
+  "interfaces": ["unsupervised_learning.UnsupervisedLearnerPrimitiveBase"],
+  "interfaces_version": "2017.9.22rc0"
 }
