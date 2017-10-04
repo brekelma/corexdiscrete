@@ -1,13 +1,13 @@
 {
-  "id": "72d9b573-3f84-3647-8a94-020f5fee532a",
-  "name": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete",
+  "id": "de2677d1-c48c-335e-ac55-6114a6bfd1be",
+  "name": "corexdiscrete.corex_discrete.CorexDiscrete",
   "common_name": "DSBox Corex Discrete",
   "description": "Return components/latent factors that explain the most multivariate mutual information in the data. For comparison, PCA returns components explaining the most variance in the data.  Serves as DSBox wrapper for https://github.com/gregversteeg/bio_corex",
   "languages": [
     "python2.7", "python3.5", "python3.6"
   ],
-  "library": "dsbox.corexdiscrete",
-  "version": "0.1.9",
+  "library": "corexdiscrete",
+  "version": "0.1.10",
   "source_code": "https://github.com/brekelma/corexdiscrete.git",
   "is_class": true,
   "attributes": [
@@ -18,7 +18,7 @@
       "description": "Label (i.e. highest probability value) of each hidden unit for each sample.  Note, hidden units are binary by default, so label in {0,1}."
     },
     {
-      "type": "dsbox.corexdiscrete.corexdiscrete.corex.Corex",
+      "type": "corexdiscrete.corexdiscrete.corex.Corex",
       "name": "model",
       "description": "Bio_corex model (see https://github.com/gregversteeg/bio_corex)."
     },
@@ -99,7 +99,7 @@
 "methods_available": [
     {
       "name": "fit",
-      "id": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete.fit",
+      "id": "corexdiscrete.corex_discrete.CorexDiscrete.fit",
       "description": "'Fit the model according to the given training data.\n",
       "returns": {
         "type": "object",
@@ -118,7 +118,7 @@
     },
     {
       "name": "produce",
-      "id": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete.produce",
+      "id": "corexdiscrete.corex_discrete.CorexDiscrete.produce",
       "description": "'Transform data according to learned model.\n",
       "returns": {
         "type": "array-like",
@@ -138,7 +138,7 @@
       }, 
       {
       "name": "set_training_data",
-      "id": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete.set_training_data",
+      "id": "corexdiscrete.corex_discrete.CorexDiscrete.set_training_data",
       "description": "Add training data.\n",
       "returns": {
         "type": "object",
@@ -157,7 +157,7 @@
       },
       {
       "name": "set_params",
-      "id": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete.set_params",
+      "id": "corexdiscrete.corex_discrete.CorexDiscrete.set_params",
       "description": "Set latent factors.\n",
       "returns": {
         "type": "object",
@@ -175,7 +175,7 @@
       },
       {
       "name": "get_params",
-      "id": "dsbox.corexdiscrete.corex_discrete.CorexDiscrete.get_params",
+      "id": "corexdiscrete.corex_discrete.CorexDiscrete.get_params",
       "description": "Get latent factors.\n",
       "returns": {
         "type": "Params",

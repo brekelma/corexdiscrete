@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="corexdiscrete",
-    version="0.1.9",
+    version="0.1.10",
     description="Corex finds latent factors that explain the most correlation in discrete data.",
     license="MIT",
     author="Rob Brekelmans/Greg Ver Steeg",
@@ -21,5 +21,10 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.5",
-    ]
+    ], 
+    entry_points = {
+    'd3m.primitives': [
+        'corex_discrete.CorexDiscrete = corexdiscrete.corex_discrete:CorexDiscrete',
+    ],
+    }
 )

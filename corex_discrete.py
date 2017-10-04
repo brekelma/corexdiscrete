@@ -20,6 +20,28 @@ Params = NamedTuple('Params', [
 ])
 
 class CorexDiscrete(UnsupervisedLearnerPrimitiveBase):  #(Primitive):
+    """
+    Return components/latent factors that explain the most multivariate mutual information in the data. For comparison, PCA returns components explaining the most variance in the data.  Serves as DSBox wrapper for https://github.com/gregversteeg/bio_corex
+    """
+    __author__ = "Rob Brekelmans <brekelma@usc.edu>, Greg Ver Steeg"
+    __metadata__ = {
+        "team": "ISI DSBox",
+        "common_name": "CorexDiscrete",
+        "algorithm_type": ["DimensionalityReduction"],
+        "compute_resources": {
+            "sample_size": [0.53],
+            "sample_unit": ["MB"],
+            "disk_per_node": [],
+            "expected_running_time": [67.97421765327454],
+            "gpus_per_node": [],
+            "cores_per_node": [1],
+            "mem_per_gpu": [],
+            "mem_per_node": [],
+            "num_nodes": [],
+        }
+    }
+
+
 
     def __init__(self, n_hidden: int = None, dim_hidden : int = 2, latent_pct : float = .2, max_iter : int = 100, 
                 tol : float = 1e-5, n_repeat : int = 1, max_samples : int = 10000, n_cpu : int = 1, 
